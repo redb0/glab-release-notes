@@ -1,0 +1,104 @@
+[project]
+name = "glab-release-notes"
+version = "0.1.0"
+description = "GitLab release notes from merged MRs: validate labels and quote, append entries, and promote them under a version in CI."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["gitlab", "release-notes", "changelog", "ci", "merge-request"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Version Control",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.12"
+authors = [{ name = "Vladimir Voronov", email = "vvoronov@mwnts.ru" }]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/redb0/glab-release-notes"
+Repository = "https://github.com/redb0/glab-release-notes"
+Issues = "https://github.com/redb0/glab-release-notes/issues"
+Changelog = "https://github.com/redb0/glab-release-notes/releases"
+
+[project.scripts]
+glab-release-notes = "glab_release_notes.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=7.0.0",
+    "mypy>=1.15",
+    "ruff>=0.15",
+    "commitizen>=4.8",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13"]
+build-backend = "uv_build"
+
+# The package lives at the repo root, not in src/.
+[tool.uv.build-backend]
+module-name = "glab_release_notes"
+module-root = ""
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+# https://docs.astral.sh/ruff/rules/
+lint.select = ["ALL"]
+lint.ignore = [
+    "COM812",  # conflicts with ruff format
+    "CPY001",  # requires a copyright header in every file
+    "D104",    # docstring in the package __init__.py
+    "D107",    # docstring in __init__
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "S101",     # assert is the test
+    "D103",     # the test name is its description
+    "PLR2004",  # the expected value is a literal from the spec, not a nearby constant
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-positional-args = 3
+
+[tool.ruff.lint.mccabe]
+max-complexity = 6
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+pretty = true
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "pep440"
+# The version lives only in pyproject.toml. Duplicating it in
+# glab_release_notes/__init__.py would inevitably drift.
+version_provider = "uv"
+update_changelog_on_bump = true
+major_version_zero = true
