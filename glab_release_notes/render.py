@@ -17,7 +17,7 @@ def format_entry(
 ) -> str:
     """Build a single list item for the release notes."""
     links = [f"[#{mr.iid}]({mr.web_url})"]
-    if ticket is not None and jira_base is not None:
+    if ticket and jira_base:
         links.append(f"[{ticket}]({jira_base}/{ticket})")
     emoji = f"{spec.emoji} " if spec.emoji else ""
     return f"* {emoji}{text} ({', '.join(links)}) by [@{mr.author_username}]({mr.author_url})"

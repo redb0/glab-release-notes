@@ -210,6 +210,20 @@ def test_format_entry_without_jira_base() -> None:
     assert "[#33](" in line
 
 
+def test_format_entry_empty_jira_base() -> None:
+    """An empty jira_base (unset CI variable) behaves the same as absent."""
+    spec = _CFG.by_label["feature"]
+    line = format_entry(
+        text="gRPC support",
+        spec=spec,
+        mr=_mr(),
+        ticket="FMT-1110",
+        jira_base="",
+    )
+    assert "[FMT-1110]" not in line
+    assert "[#33](" in line
+
+
 def test_format_entry_without_emoji() -> None:
     """A section without an emoji produces a plain entry."""
     spec = SectionSpec("bug", "Defects", "", "bug")
