@@ -1,6 +1,6 @@
 [project]
 name = "glab-release-notes"
-version = "0.1.0"
+version = "0.1.1"
 description = "GitLab release notes from merged MRs: validate labels and quote, append entries, and promote them under a version in CI."
 readme = "README.md"
 license = "MIT"
