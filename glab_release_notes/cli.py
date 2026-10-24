@@ -66,7 +66,7 @@ def _build_parser() -> argparse.ArgumentParser:
     append.add_argument(
         "--jira-base",
         default=None,
-        help="Base URL of Jira, e.g. https://jira.mwnts.net/browse; no link without it",
+        help="Base URL of Jira, e.g. https://jira.example/browse; no link without it",
     )
     promote = subparsers.add_parser("promote", help="Move unreleased entries under a version")
     promote.add_argument("--version", required=True, help="Version, e.g. 0.8.2")
