@@ -19,7 +19,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 requires-python = ">=3.12"
-authors = [{ name = "Vladimir Voronov", email = "vvoronov@mwnts.ru" }]
+authors = [{ name = "Vladimir Voronov", email = "voronov.volodya2013@yandex.ru" }]
 dependencies = []
 
 [project.urls]

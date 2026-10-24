@@ -34,7 +34,7 @@ _NEW_IID = 33
 _RECORDED_IID = 35
 _VALIDATE_IID = 42
 _PAYLOAD_IID = 10
-_JIRA_BASE = "https://jira.mwnts.net/browse"
+_JIRA_BASE = "https://jira.example/browse"
 _CFG = default_config()
 
 SAMPLE = """\
@@ -78,10 +78,10 @@ def _mr(**overrides: object) -> MergeRequest:
         "iid": _NEW_IID,
         "description": "> Support for detailed gRPC errors\n",
         "labels": ("feature",),
-        "web_url": "https://gitlab.mwnts.net/oss/m.m/SDK/-/merge_requests/33",
-        "author_username": "vvoronov",
-        "author_url": "https://gitlab.mwnts.net/vvoronov",
-        "source_branch": "FMT-1110",
+        "web_url": "https://gitlab.example/your/project/-/merge_requests/33",
+        "author_username": "alice",
+        "author_url": "https://gitlab.example/alice",
+        "source_branch": "PROJ-123",
         "state": "merged",
     }
     fields.update(overrides)
@@ -113,9 +113,9 @@ def test_parse_quote_missing() -> None:
 
 
 def test_parse_ticket_from_branch() -> None:
-    """The Jira key is normalized from FMT-1110 and fmt_1110."""
-    assert parse_ticket("FMT-1110") == "FMT-1110"
-    assert parse_ticket("fmt_1110") == "FMT-1110"
+    """The Jira key is normalized from PROJ-123 and proj_123."""
+    assert parse_ticket("PROJ-123") == "PROJ-123"
+    assert parse_ticket("proj_123") == "PROJ-123"
     assert parse_ticket("coverage-mr") is None
 
 
@@ -178,20 +178,20 @@ def test_format_entry_with_jira() -> None:
         text="gRPC support",
         spec=spec,
         mr=_mr(),
-        ticket="FMT-1110",
+        ticket="PROJ-123",
         jira_base=_JIRA_BASE,
     )
     assert line.startswith("* ✨ gRPC support ")
-    assert "[#33](https://gitlab.mwnts.net/oss/m.m/SDK/-/merge_requests/33)" in line
-    assert "[FMT-1110](https://jira.mwnts.net/browse/FMT-1110)" in line
-    assert "[@vvoronov](https://gitlab.mwnts.net/vvoronov)" in line
+    assert "[#33](https://gitlab.example/your/project/-/merge_requests/33)" in line
+    assert "[PROJ-123](https://jira.example/browse/PROJ-123)" in line
+    assert "[@alice](https://gitlab.example/alice)" in line
 
 
 def test_format_entry_without_ticket() -> None:
     """Without a ticket key there is no Jira link."""
     spec = _CFG.by_label["bug"]
     line = format_entry(text="Fix", spec=spec, mr=_mr(), ticket=None, jira_base=_JIRA_BASE)
-    assert "jira.mwnts.net" not in line
+    assert "jira.example" not in line
     assert "[#33](" in line
 
 
@@ -202,11 +202,11 @@ def test_format_entry_without_jira_base() -> None:
         text="gRPC support",
         spec=spec,
         mr=_mr(),
-        ticket="FMT-1110",
+        ticket="PROJ-123",
         jira_base=None,
     )
-    assert "jira.mwnts.net" not in line
-    assert "[FMT-1110]" not in line
+    assert "jira.example" not in line
+    assert "[PROJ-123]" not in line
     assert "[#33](" in line
 
 
@@ -217,10 +217,10 @@ def test_format_entry_empty_jira_base() -> None:
         text="gRPC support",
         spec=spec,
         mr=_mr(),
-        ticket="FMT-1110",
+        ticket="PROJ-123",
         jira_base="",
     )
-    assert "[FMT-1110]" not in line
+    assert "[PROJ-123]" not in line
     assert "[#33](" in line
 
 
